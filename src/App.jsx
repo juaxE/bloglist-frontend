@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import Blog from './components/Blog'
+import Notification from './components/Notification'
 import blogService from './services/blogs'
 import loginService from './services/login'
 
@@ -13,7 +14,9 @@ const App = () => {
   const [author, setAuthor] = useState('')
   const [url, setUrl] = useState('')
   const [user, setUser] = useState(null)
-  const [errorMessage, setErrorMessage] = useState(null)
+  const [notifMessage, setNotifMessage] = useState(null)
+  const [notifType, setNotifType] = useState(null)
+
 
   useEffect(() => {
     blogService.getAll().then(blogs =>
@@ -46,10 +49,10 @@ const App = () => {
       setUsername('')
       setPassword('')
     } catch (exception) {
-      setErrorMessage('wrong credentials')
+      setNotif("wrong credentials", "error")
       setTimeout(() => {
-        setErrorMessage(null)
-      }, 5000)
+        clearNotif()
+      }, 3000)
     }
   }
 
@@ -68,12 +71,26 @@ const App = () => {
         setTitle('')
         setAuthor('')
         setUrl('')
+        setNotif(`A new blog ${title} by ${author} added`, "success")
+        setTimeout(() => {
+          clearNotif()
+        }, 3000)
       })
   }
 
   const logOut = () => {
     window.localStorage.removeItem('loggedBlogAppUser')
     setUser(null)
+  }
+
+  const setNotif = (message, type) => {
+    setNotifMessage(message)
+    setNotifType(type)
+  }
+
+  const clearNotif = () => {
+    setNotifMessage(null)
+    setNotifType(null)
   }
 
   const loginForm = () => (
@@ -151,6 +168,7 @@ const App = () => {
   return (
     <div>
       <h2>Blogs</h2>
+      <Notification message={notifMessage} type={notifType} />
       {!user && loginForm()}
       {user &&
         <div>
