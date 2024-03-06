@@ -1,6 +1,6 @@
 import { useState } from 'react'
 
-const Blog = ({ blog }) => {
+const Blog = ({ blog, handleLikes }) => {
   const [visibleDetails, setVisibleDetails] = useState(false)
 
   const showWhenVisible = { display: visibleDetails ? '' : 'none' }
@@ -9,6 +9,17 @@ const Blog = ({ blog }) => {
     setVisibleDetails(!visibleDetails)
   }
 
+  const addLike = (event) => {
+    event.preventDefault()
+    const newLikes = blog.likes + 1
+    handleLikes({
+      user: blog.user.id,
+      likes: newLikes,
+      title: blog.title,
+      author: blog.author,
+      url: blog.url
+    }, blog.id)
+  }
 
   const blogStyle = {
     paddingTop: 10,
@@ -26,7 +37,7 @@ const Blog = ({ blog }) => {
       <div style={showWhenVisible}>
         <p>{blog.url}</p>
         <p>{blog.likes}
-          <button onClick={() => console.log('liked')}>like</button>
+          <button onClick={addLike}>like</button>
         </p>
         <p>{blog.user.name}</p>
       </div>

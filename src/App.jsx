@@ -58,16 +58,18 @@ const App = () => {
 
   const handleBlogSubmit = async (blogObject) => {
 
-    blogService
-      .create(blogObject)
-      .then(returnedBlog => {
-        setBlogs(blogs.concat(returnedBlog))
-        setNotif(`A new blog ${blogObject.title} by ${blogObject.author} added`, "success")
-        blogFormRef.current.toggleVisibility()
-        setTimeout(() => {
-          clearNotif()
-        }, 3000)
-      })
+    const returnedBlog = await blogService.create(blogObject)
+    setBlogs(blogs.concat(returnedBlog))
+    setNotif(`A new blog ${returnedBlog.title} by ${returnedBlog.author} added`, "success")
+    blogFormRef.current.toggleVisibility()
+    setTimeout(() => {
+      clearNotif()
+    }, 3000)
+  }
+
+  const handleLikes = async (changedBlog, id) => {
+    const returnedBlog = await blogService.update(changedBlog, id)
+    setBlogs(blogs.map(blog => blog.id !== id ? blog : returnedBlog))
   }
 
   const logOut = () => {
@@ -116,7 +118,7 @@ const App = () => {
     <div>
 
       {blogs.map(blog =>
-        <Blog key={blog.id} blog={blog} />
+        <Blog key={blog.id} blog={blog} handleLikes={handleLikes} />
       )}
     </div>
   )
