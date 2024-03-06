@@ -68,6 +68,11 @@ const App = () => {
     }, 3000)
   }
 
+  const handleBlogDeletion = async (id) => {
+    await blogService.remove(id)
+    setBlogs(blogs.filter(blog => blog.id !== id))
+  }
+
   const handleLikes = async (changedBlog, id, user) => {
     const returnedBlog = await blogService.update(changedBlog, id)
     const returnedBlogWithUser = { ...returnedBlog, user: user }
@@ -120,7 +125,7 @@ const App = () => {
     <div>
 
       {blogs.map(blog =>
-        <Blog key={blog.id} blog={blog} handleLikes={handleLikes} />
+        <Blog key={blog.id} blog={blog} handleLikes={handleLikes} handleBlogDeletion={handleBlogDeletion} />
       )}
     </div>
   )
