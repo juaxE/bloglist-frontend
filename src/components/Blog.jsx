@@ -12,13 +12,14 @@ const Blog = ({ blog, handleLikes }) => {
   const addLike = (event) => {
     event.preventDefault()
     const newLikes = blog.likes + 1
+
     handleLikes({
       user: blog.user.id,
       likes: newLikes,
       title: blog.title,
       author: blog.author,
       url: blog.url
-    }, blog.id)
+    }, blog.id, blog.user)
   }
 
   const blogStyle = {

@@ -67,9 +67,10 @@ const App = () => {
     }, 3000)
   }
 
-  const handleLikes = async (changedBlog, id) => {
+  const handleLikes = async (changedBlog, id, user) => {
     const returnedBlog = await blogService.update(changedBlog, id)
-    setBlogs(blogs.map(blog => blog.id !== id ? blog : returnedBlog))
+    const returnedBlogWithUser = { ...returnedBlog, user: user }
+    setBlogs(blogs.map(blog => blog.id !== id ? blog : returnedBlogWithUser))
   }
 
   const logOut = () => {
