@@ -29,6 +29,7 @@ const BlogForm = ({ handleBlogSubmit }) => {
                         type="text"
                         value={title}
                         name="Title"
+                        data-testid="Title"
                         onChange={({ target }) => setTitle(target.value)}
                     ></input>
                 </div>
@@ -38,6 +39,7 @@ const BlogForm = ({ handleBlogSubmit }) => {
                         type="text"
                         value={author}
                         name="Author"
+                        data-testid="Author"
                         onChange={({ target }) => setAuthor(target.value)}
                     ></input>
                 </div>
@@ -47,6 +49,7 @@ const BlogForm = ({ handleBlogSubmit }) => {
                         type="text"
                         value={url}
                         name="Url"
+                        data-testid="Url"
                         onChange={({ target }) => setUrl(target.value)}
                     ></input>
                 </div>
