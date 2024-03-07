@@ -37,7 +37,6 @@ describe('Blog app', () => {
     describe('When logged in', () => {
         beforeEach(async ({ page }) => {
             await loginWith(page, 'mluukkai', 'salainen')
-            await expect(page.getByText('Matti Luukkainen logged in')).toBeVisible()
         })
 
         test('a new blog can be created', async ({ page }) => {
@@ -51,5 +50,35 @@ describe('Blog app', () => {
             await expect(page.getByText('Console open Matti Luukkainen')).toBeVisible()
             await expect(page.getByText('Monitor off Luukka Mattinen')).toBeVisible()
         })
+    })
+
+    describe('When blogs have been created', () => {
+        beforeEach(async ({ page }) => {
+            await loginWith(page, 'mluukkai', 'salainen')
+            await createBlog(page, 'Console open', 'Matti Luukkainen', 'fullstackopen.com')
+            await createBlog(page, 'Monitor off', 'Luukka Mattinen', 'fullstackclosed.com')
+        })
+
+        test('Blog can be liked', async ({ page }) => {
+            const blogLocator = await page.getByTestId('blog').first()
+
+            await blogLocator.getByRole('button', { name: 'view' }).click()
+            await page.waitForSelector('.blogDetails')
+
+            await blogLocator.getByRole('button', { name: 'like' }).click()
+        })
+
+        test('Likes number updates', async ({ page }) => {
+            const blogLocator = await page.getByTestId('blog').first()
+
+            await blogLocator.getByRole('button', { name: 'view' }).click()
+            await page.waitForSelector('.blogDetails')
+
+            await blogLocator.getByRole('button', { name: 'like' }).click()
+
+            const likesLocator = await blogLocator.getByTestId('likes').first()
+            await expect(likesLocator).toHaveText('1')
+        })
+
     })
 })

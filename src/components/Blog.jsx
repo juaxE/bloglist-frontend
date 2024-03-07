@@ -49,12 +49,17 @@ const Blog = ({ blog, handleLikes, handleBlogDeletion }) => {
                 <button onClick={toggleVisibility}>{visibleDetails ? 'hide' : 'view'}</button>
             </p>
             <div style={showWhenVisible} className='blogDetails'>
-                <p>{blog.url}</p>
-                <p>{blog.likes}
+                <p>
+                    <span>{blog.url}</span>
+                </p>
+                <p>
+                    <span data-testid="likes">{blog.likes}</span>
                     <button onClick={addLike}>like</button>
                 </p>
-                <p>{blog.user.name}</p>
-                <button style={deleteButton} onClick={deleteBlog}>remove blog</button>
+                <span>{blog.user.name}</span>
+                <p>
+                    <button style={deleteButton} onClick={deleteBlog}>remove blog</button>
+                </p>
             </div>
         </div>
     )
