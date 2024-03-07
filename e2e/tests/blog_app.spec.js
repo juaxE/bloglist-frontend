@@ -93,5 +93,39 @@ describe('Blog app', () => {
             await expect(blogLocator).toHaveCount(1)
         })
 
+        test('Blog remove button is visible for creator', async ({ page }) => {
+            const firstBlog = await page.getByTestId('blog').first()
+
+            await firstBlog.getByRole('button', { name: 'view' }).click()
+            await page.waitForSelector('.blogDetails')
+
+            const removeButtonLocator = await firstBlog.getByRole('button', { name: 'remove blog' })
+
+            await expect(removeButtonLocator).toHaveCount(1)
+        })
+
+        test('Blog remove button is not visible for others', async ({ page, request }) => {
+            await request.post('/api/users', {
+                data: {
+                    name: 'Murto Tieto',
+                    username: 'hackerman',
+                    password: 'secure'
+                }
+            })
+            await page.goto('/')
+            await page.getByRole('button', { name: 'logout' }).click()
+
+            await loginWith(page, 'hackerman', 'secure')
+
+            const firstBlog = await page.getByTestId('blog').first()
+
+            await firstBlog.getByRole('button', { name: 'view' }).click()
+            await page.waitForSelector('.blogDetails')
+
+            const removeButtonLocator = await firstBlog.getByRole('button', { name: 'remove blog' })
+
+            await expect(removeButtonLocator).toHaveCount(0)
+        })
+
     })
 })
