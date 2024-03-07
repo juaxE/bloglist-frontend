@@ -80,5 +80,18 @@ describe('Blog app', () => {
             await expect(likesLocator).toHaveText('1')
         })
 
+        test('Blog can be deleted', async ({ page }) => {
+            const firstBlog = await page.getByTestId('blog').first()
+
+            await firstBlog.getByRole('button', { name: 'view' }).click()
+            await page.waitForSelector('.blogDetails')
+
+            page.on('dialog', dialog => dialog.accept())
+            await firstBlog.getByRole('button', { name: 'remove blog' }).click()
+
+            const blogLocator = await page.getByTestId('blog')
+            await expect(blogLocator).toHaveCount(1)
+        })
+
     })
 })
