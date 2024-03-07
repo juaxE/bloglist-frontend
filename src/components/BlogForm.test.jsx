@@ -8,9 +8,9 @@ test('The function receives correct data', async () => {
     const mockHandler = vi.fn()
     render(<BlogForm handleBlogSubmit={mockHandler} />)
 
-    const title = screen.getByTestId('Title')
-    const author = screen.getByTestId('Author')
-    const url = screen.getByTestId('Url')
+    const title = screen.getByTestId('title')
+    const author = screen.getByTestId('author')
+    const url = screen.getByTestId('url')
     const submitButton = screen.getByText('create')
 
     await user.type(title, 'Canonical string reduction')
