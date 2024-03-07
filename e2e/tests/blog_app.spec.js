@@ -1,5 +1,5 @@
 const { test, expect, beforeEach, describe } = require('@playwright/test')
-const { loginWith, createBlog } = require('./helper')
+const { loginWith, createBlog, createBlogsWithLikes } = require('./helper')
 
 describe('Blog app', () => {
     beforeEach(async ({ page, request }) => {
@@ -127,5 +127,35 @@ describe('Blog app', () => {
             await expect(removeButtonLocator).toHaveCount(0)
         })
 
+    })
+
+    describe('When blogs have likes', () => {
+        beforeEach(async ({ page }) => {
+            test.setTimeout(120000)
+            await loginWith(page, 'mluukkai', 'salainen')
+            await createBlogsWithLikes(page)
+            await page.goto('/')
+        })
+
+        test('Blogs are sorted by likes', async ({ page }) => {
+            const blogsLocator = await page.getByTestId('blog')
+            const blogsSize = await blogsLocator.count()
+            for (let i = 0; i < blogsSize; i++) {
+                await blogsLocator.nth(i).getByRole('button', { name: 'view' }).click()
+            }
+
+            const likesLocator = await page.getByTestId('likes')
+            for (let i = 0; i < blogsSize - 1; i++) {
+                const currentIndexLikes = await likesLocator.nth(i).textContent()
+                const nextIndexLikes = await likesLocator.nth(i - 1).textContent()
+
+                const currentAsInt = parseInt(currentIndexLikes)
+                const nextAsInt = parseInt(nextIndexLikes)
+
+                expect(currentAsInt).toBeGreaterThanOrEqual(nextAsInt)
+            }
+
+
+        })
     })
 })

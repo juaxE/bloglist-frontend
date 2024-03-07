@@ -1,1 +1,1 @@
-Hours used this far: 5
+Hours used this far: 10

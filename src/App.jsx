@@ -60,7 +60,7 @@ const App = () => {
     const handleBlogSubmit = async (blogObject) => {
 
         const returnedBlog = await blogService.create(blogObject)
-        setBlogs(blogs.concat(returnedBlog))
+        setBlogs((prevBlogs) => [...prevBlogs, returnedBlog])
         setNotif(`A new blog ${returnedBlog.title} by ${returnedBlog.author} added`, 'success')
         blogFormRef.current.toggleVisibility()
         setTimeout(() => {
